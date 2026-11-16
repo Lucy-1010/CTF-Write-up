@@ -1,5 +1,6 @@
 * Challenge Name: Ignite
 * Platform: TryHackMe
+* URL: https://tryhackme.com/room/ignite
 * Type: Web
 * Difficulty: Easy
 
@@ -22,7 +23,7 @@ I saw some directory paths. It showed the service and version used (Fuel CMS 1.4
 
 5. I wanted to find vulnerabilities on the target. To speed up this process, I used "Nuclei" tool.
 It scanned and gave a critical vulnerability of CVE-2018-16763 along with a URL with which the vulnerability could be exploited.
-We also cross checked on our search engine whether our target was vulnerable to CVE-2018-16763 or not and we found that it really was because of Fuel CMS.
+I also cross checked on our search engine whether our target was vulnerable to CVE-2018-16763 or not and we found that it really was because of Fuel CMS.
 <img width="1488" height="574" alt="Ignite5" src="https://github.com/user-attachments/assets/0ee31e7d-778b-4b0f-a6a7-6a1f7a12ce1d" />
 
 
