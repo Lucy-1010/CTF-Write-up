@@ -2,6 +2,9 @@
 * Level: Apprentice
 * Platform: PortSwigger
 
+# Command Injection
+Command Injection (also called as shell injection) is a web vulnerability which allows a normal user to execute commands in server OS.
+
 # Procedure
 
 * I started Burp Suite (I have community edition).
@@ -13,5 +16,5 @@
 
 * Then, I clicked the option of checking stock which I intercepted in BurpSuite.
 I manipulated the request by adding ";whoami" after storeId (productId and storeId were at the end of request body).
-';' indicates the end of the command and 'whoami' reveals the user's name of server.
+';' is the command separator and 'whoami' reveals the username of OS.
 <img width="1365" height="615" alt="CI2" src="https://github.com/user-attachments/assets/bde052b2-4f1e-483c-8c9c-f2fc0247c036" />
